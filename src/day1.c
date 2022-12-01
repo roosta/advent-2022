@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define BUFSIZE 16
 #define MAXLEN 2500
@@ -25,12 +25,10 @@ void mostcal(void) {
   long number, high;
   long result = high = 0;
   char *endptr;
-  char *str;
   for (int i = 0; i < height; i++) {
-    str = buf[i];
-    number = strtol(str, &endptr, 10);
+    number = strtol(buf[i], &endptr, 10);
     result += number;
-    if (endptr == str) {
+    if (endptr == buf[i]) {
       if (result > high) high = result;
       result = 0;
       continue;
@@ -39,9 +37,41 @@ void mostcal(void) {
   printf("most calories: %ld\n", high);
 }
 
+void top3(void) {
+  long number;
+  long result = 0;
+  long top[3] = { 0, 0, 0 };
+  char *endptr;
+  for (int i = 0; i < height; i++) {
+    number = strtol(buf[i], &endptr, 10);
+    result += number;
+    if (endptr == buf[i] || i == height - 1) {
+      if (result > top[0]) {
+        top[2] = top[1];
+        top[1] = top[0];
+        top[0] = result;
+      } else if (result > top[1] && result != top[0]) {
+        top[2] = top[1];
+        top[1] = result;
+      } else if (result > top[2] && result != top[1]) {
+        top[2] = result;
+      }
+      result = 0;
+      continue;
+    };
+  }
+  result = 0;
+  for (int i = 0; i < 3; i++) {
+    result += top[i];
+  }
+  printf("sum of top 3 elves: %ld\n", result);
+}
+
 int main() {
   for (height = 0; (length[height] = get_line(buf[height])) > 0; height++)
     ;
 
   mostcal();
+  top3();
+  return 0;
 }
