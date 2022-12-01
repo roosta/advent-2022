@@ -57,7 +57,6 @@ void top3(void) {
         top[2] = result;
       }
       result = 0;
-      continue;
     };
   }
   result = 0;
