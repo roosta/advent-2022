@@ -16,7 +16,7 @@ int get_line(char s[]) {
   return i;
 }
 
-int main() {
+void mostcal(void) {
   char buf[MAXLINE];
   long number, high;
   long result = high = 0;
@@ -30,5 +30,10 @@ int main() {
       continue;
     };
   }
-  printf("result: %ld\n", high);
+  printf("most calories: %ld\n", high);
+}
+
+
+int main() {
+  mostcal();
 }
