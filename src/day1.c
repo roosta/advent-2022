@@ -42,10 +42,10 @@ void top3(void) {
   long result = 0;
   long top[3] = { 0, 0, 0 };
   char *endptr;
-  for (int i = 0; i < height; i++) {
+  for (int i = 0; i <= height; i++) {
     number = strtol(buf[i], &endptr, 10);
     result += number;
-    if (endptr == buf[i] || i == height - 1) {
+    if (endptr == buf[i]) {
       if (result > top[0]) {
         top[2] = top[1];
         top[1] = top[0];
