@@ -6,13 +6,13 @@ My solutions to [Advent of code 2022](https://adventofcode.com/2022/)
 To compile a file run:
 
 ```sh
-make bin/day1.out
+make bin/day1
 ```
 
 Program expects input on `stdin`:
 
 ```sh
-bin/day1.out < input/day1.txt
+bin/day1 < input/day1.txt
 ```
 
 ## Project local config
@@ -30,23 +30,23 @@ set secure
 ```vim
 " use expand() to strip basename and extension when compiling with make
 " See :help filename-modifiers
-set makeprg=make\ bin/%:t:r.out
+set makeprg=make\ bin/%:t:r
 ```
 
 This will ensure that the `:make` command compiles the current buffer. Basename
-and extension is removed so that `src/1-3.c` becomes `bin/1-3.out`
+and extension is removed so that `src/day1.c` becomes `bin/day1`
 
 
 ### Exec command
 
 This command executes the compiled file and reads its output to a new vsplit.
 ```vim
-command! Exec set splitright | vnew | read ! bin/#<.out
+command! Exec set splitright | vnew | read ! bin/#<
 ```
 ### F5 mapping
 
 This binding quietly executes a compiled file in the `bin` folder
 ```vim
-map <F5> :! bin/%<.out<cr>
+map <F5> :! bin/%<<cr>
 
 

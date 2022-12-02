@@ -1,6 +1,10 @@
-# Create target directory
+CC=gcc
+CFLAGS=-g -Wall -Wextra -O0 -std=c99 -pedantic -lm
 dir_guard=@mkdir -p $(@D)
 
-bin/%.out: src/%.c
+bin/%: %.o utils.o
 	$(dir_guard)
-	@gcc -g -Wall -Wextra -O0 -std=c99 -pedantic -lm $< -o $@
+	$(CC) $(CFLAGS) $^ -o $@
+
+%.o: src/%.c src/advent.h
+	$(CC) $(CFLAGS) -c $< -o $@
