@@ -23,3 +23,8 @@ void readbuf(void) {
   for (height = 0; (length[height] = get_line(buf[height])) > 0; height++)
     ;
 }
+
+void printb(unsigned int number) {
+  printf(BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(number));
+}
+
