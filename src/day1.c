@@ -1,25 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define BUFSIZE 16
-#define MAXLEN 2500
-
-char buf[MAXLEN][BUFSIZE];
-int length[MAXLEN];
-int height;
-
-int get_line(char s[]) {
-  int c, i;
-  c = getchar();
-  for (i = 0; i < BUFSIZE - 1 && c != EOF && c != '\n'; ++i, c = getchar()) {
-    s[i] = c;
-  }
-  if (c == '\n')
-    s[i++] = c;
-  s[i] = '\0';
-  return i;
-}
+#include "advent.h"
 
 void mostcal(void) {
   long number, high;
@@ -67,10 +49,13 @@ void top3(void) {
 }
 
 int main() {
-  for (height = 0; (length[height] = get_line(buf[height])) > 0; height++)
-    ;
 
+  // Read buffer
+  readbuf();
+
+  // Solutions
   mostcal();
   top3();
+
   return 0;
 }
