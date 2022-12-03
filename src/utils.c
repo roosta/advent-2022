@@ -26,5 +26,6 @@ void readbuf(void) {
 
 void printb(unsigned int number) {
   printf(BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(number));
+  printf("\n");
 }
 
