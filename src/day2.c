@@ -10,6 +10,9 @@ enum points {
 
 enum move { ROCK, PAPER, SCISSOR };
 
+char lchar[3] = { 'A', 'B', 'C' };
+char rchar[3] = { 'X', 'Y', 'Z' };
+
 // Assign rock/paper/scissor given an input array of values and a target char.
 int assign(char vals[], char ch) {
   if (vals[0] == ch) {
@@ -25,8 +28,6 @@ int assign(char vals[], char ch) {
 int vs(char lch, char rch) {
   enum move op;
   enum move me;
-  char lchar[3] = { 'A', 'B', 'C' };
-  char rchar[3] = { 'X', 'Y', 'Z' };
   int movep, result;
   op = assign(lchar, lch);
   me = assign(rchar, rch);
@@ -42,7 +43,7 @@ int vs(char lch, char rch) {
 }
 
 // Move through input
-void strat(void) {
+void total(void) {
   char lch, rch;
   int result = 0;
   for (int i = 0; i < height; i++) {
@@ -50,11 +51,11 @@ void strat(void) {
     rch = buf[i][2];
     result += vs(lch, rch);
   }
-  printf("score total is %d\n", result);
+  printf("Score total is %d\n", result);
 }
 
 int main() {
-  readbuf(); // read buffer
-  strat(); // calculate point total
+  readbuf(); // read in buffer
+  total();
   return 0;
 }
