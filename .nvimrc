@@ -9,3 +9,5 @@ command! Exec set splitbelow | new | read ! bin/#:t:r
 " Helper mapping for running compiled c programs that are outputted to
 " bin/[target]
 map <F5> :! bin/%:t:r<cr>
+
+let g:ale_c_parse_makefile = 1

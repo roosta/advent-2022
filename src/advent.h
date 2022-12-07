@@ -19,3 +19,4 @@ extern int height;
 int get_line(char s[]);
 void readbuf(void);
 void printb(unsigned int number);
+void strcopy(char to[], char from[]);
