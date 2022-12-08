@@ -45,15 +45,28 @@ void part1() {
 
   for (int i = 0; i < height; i++) {
     parse_line(buf[i], i);
-    if ((r1 >= l1 && r2 <= l2) || (l1 >= r1 && l2 <= r2)) {
+    if ((l1 >= r1 && l2 <= r2) || (r1 >= l1 && r2 <= l2) ) {
       result++;
     }
   }
-  printf("Part one: number of overlapping pairs %d\n", result);
+  printf("Part one: number of contained pairs %d\n", result);
+}
+
+/* In how many assignment pairs do the ranges overlap? */
+void part2() {
+  int result = 0;
+  for (int i = 0; i < height; i++) {
+    parse_line(buf[i], i);
+    if ((l2 >= r1 && l1 <= r2)) {
+      result++;
+    }
+  }
+  printf("Part two: number of overlapping pairs %d\n", result);
 }
 
 int main() {
   readbuf(); // read in buffer
   part1();
+  part2();
   return 0;
 }
