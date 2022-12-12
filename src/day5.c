@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#define MAXSTACK 10
+#define MAXSTACK 50
 
 // Globals
 int sp[MAXSTACK] = { 0 };
@@ -70,34 +70,37 @@ void parse_head(int max) {
   }
 }
 
-long parse_n(char cn) {
+long parse_n(char str[]) {
   char *endptr;
-  char str[2] = { cn, '\0' };
   long result = strtol(str, &endptr, 10);
   if (endptr == str) {
-    printf("Failed to parse '%c'", cn);
+    printf("Failed to parse '%s'", str);
     return 0;
   } else {
     return result;
   }
 }
 
-// Parse a move line, doesn't handle indexes above 9
 void parse_move(char line[], int idx) {
-  int nc = 0;
   long move, from, to;
+  int i, j, nc;
   char ch;
   move = from = to = 0;
-
-  for (int i = 0; i < length[idx]; i++) {
-    ch = line[i];
-    if (isdigit(ch)) {
+  nc = 0;
+  char str[4];
+  for (i = 0, j = 0; i < length[idx]; i++) {
+    while (isdigit(line[i])) {
+      str[j++] = line[i++];
+    }
+    if (j > 0) {
+      str[j] = '\0';
+      j = 0;
       if (nc == 0) {
-        move = parse_n(ch);
+        move = parse_n(str);
       } else if (nc == 1) {
-        from = parse_n(ch);
+        from = parse_n(str);
       } else if (nc == 2) {
-        to = parse_n(ch);
+        to = parse_n(str);
       }
       nc++;
     }
@@ -112,8 +115,8 @@ void parse_move(char line[], int idx) {
 // print diagram
 void pdiagram(void) {
   char ch;
-  for (int i = 5; i >= 0; i--) {
-    for (int j = 0; j < 5; j++) {
+  for (int i = MAXSTACK - 1; i >= 0; i--) {
+    for (int j = 0; j < MAXSTACK; j++) {
       ch = diagram[j][i];
       printf("[%c]", ch);
     }
@@ -131,13 +134,18 @@ void part1(void) {
   parse_head(i);
   i++; // skip empty line
 
-  pdiagram();
+  /* pdiagram(); */
   for (; i < height; i++) {
     parse_move(buf[i], i);
   }
 
-  /* printf("After\n"); */
-  pdiagram();
+  char ch;
+  for (int j = 1; j < 10; j++) {
+    ch = pop(j);
+    printf("%c", ch);
+  }
+  printf("\n");
+  /* pdiagram(); */
 }
 
 int main() {
