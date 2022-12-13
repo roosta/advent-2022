@@ -109,8 +109,22 @@ void move1(char line[], int idx) {
 // print diagram
 void print_diagram(void) {
   char ch;
-  for (int i = MAXSTACK - 1; i >= 0; i--) {
-    for (int j = 1; j < WIDTH; j++) {
+  int max = 0;
+  int j, i, idx;
+
+  /* find tallest column */
+  for (i = 0; i < WIDTH; i++) {
+    for (j = 0, idx = 0; j < MAXSTACK; j++) {
+      if (isalpha(diagram[i][j])) {
+        idx++;
+        if (idx > max) max = idx;
+      }
+    }
+  }
+
+  /* print diagram tilted 90 degrees, so it matches input */
+  for (i = max - 1; i >= 0; i--) {
+    for (j = 1; j < WIDTH; j++) {
       ch = diagram[j][i];
       printf("[%c]", ch);
     }
