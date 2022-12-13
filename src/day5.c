@@ -7,13 +7,19 @@
 #define WIDTH 10
 #define MAXWIDTH 35
 
-// Globals
-int sp[MAXSTACK] = { 0 };
+/* Globals */
+int sp[MAXSTACK];
 char diagram[WIDTH][MAXSTACK];
-int cols[MAXWIDTH] = { 0 };
+int cols[MAXWIDTH];
 
+/* Setup diagram array with spaces, aids in printing via print_diagram, reset
+ * stack positions, and clear cols */
+void setup() {
+  for (int i = 0; i < MAXSTACK; i++)
+    sp[i] = 0;
+  for (int i = 0; i < MAXWIDTH; i++)
+    cols[i] = 0;
 
-void init() {
   for (int i = 0; i < WIDTH; i++) {
     for (int j = 0; j < MAXSTACK; j++) {
       diagram[i][j] = ' ';
@@ -45,8 +51,8 @@ double pop(int col) {
   }
 }
 
-// Parse column notation at the bottom of diagram
-// Doesn't handle indexs beyond 9
+/* Parse column notation at the bottom of diagram */
+/* Doesn't handle indexs beyond 9 */
 void parse_cols(char line[], int idx) {
   int j = 1;
   for (int i = 0; i < length[idx]; i++) {
@@ -56,22 +62,7 @@ void parse_cols(char line[], int idx) {
   }
 }
 
-// Parse diagram in input data, store in global diagram array
-void parse_head(int max) {
-  char ch;
-  for (int i = max; i >= 0; i--) {
-    if (i == max - 1)
-      parse_cols(buf[i], max - 1);
-
-    for (int j = 0; j < length[i]; j++) {
-      ch = buf[i][j];
-      if (isalpha(ch) && buf[i][j - 1] == '[' && buf[i][j + 1] == ']') {
-        push(cols[j], ch);
-      }
-    }
-  }
-}
-
+/* Parse number as long */
 long parse_n(char str[]) {
   char *endptr;
   long result = strtol(str, &endptr, 10);
@@ -83,7 +74,8 @@ long parse_n(char str[]) {
   }
 }
 
-void parse_move(char line[], int idx) {
+// Parse and execute a move
+void move1(char line[], int idx) {
   long move, from, to;
   int i, j, nc;
   char ch;
@@ -115,7 +107,7 @@ void parse_move(char line[], int idx) {
 }
 
 // print diagram
-void pdiagram(void) {
+void print_diagram(void) {
   char ch;
   for (int i = MAXSTACK - 1; i >= 0; i--) {
     for (int j = 1; j < WIDTH; j++) {
@@ -127,33 +119,72 @@ void pdiagram(void) {
   printf("\n");
 }
 
-void part1(void) {
-  int i;
+/* Parse diagram in input data, store in global diagram array Return index for
+ * remaining data */
+int parse_diagram() {
+  char ch;
+  int idx;
 
-  // Isolate the diagram
-  for (i = 0; buf[i][0] != '\n' && buf[i][1] != '\0'; i++)
+  // Isolate the diagram index
+  for (idx = 0; buf[idx][0] != '\n' && buf[idx][1] != '\0'; idx++)
     ;
-  parse_head(i);
-  i++; // skip empty line
 
-  /* pdiagram(); */
-  for (; i < height; i++) {
-    parse_move(buf[i], i);
+  // parse columns, push to stack
+  for (int i = idx; i >= 0; i--) {
+    if (i == idx - 1)
+      parse_cols(buf[i], idx - 1);
+
+    for (int j = 0; j < length[i]; j++) {
+      ch = buf[i][j];
+      if (isalpha(ch) && buf[i][j - 1] == '[' && buf[i][j + 1] == ']') {
+        push(cols[j], ch);
+      }
+    }
+  }
+  idx++; // skip empty line
+  return idx;
+}
+/* After the rearrangement procedure completes, what crate ends up on top of
+ * each stack? */
+void part1(void) {
+  char ch;
+  int idx;
+
+  setup();
+  idx = parse_diagram();
+
+  for (int i = idx; i < height; i++) {
+    move1(buf[i], i);
   }
 
-  char ch;
   for (int j = 1; j < 10; j++) {
     ch = pop(j);
     printf("%c", ch);
   }
   printf("\n");
-  /* pdiagram(); */
+  /* print_diagram(); */
+}
+
+void part2(void) {
+  char ch;
+  int idx;
+
+  setup();
+  idx = parse_diagram();
+  for (int i = idx; i < height; i++) {
+    move1(buf[i], i);
+  }
+
+  for (int j = 1; j < 10; j++) {
+    ch = pop(j);
+    printf("%c", ch);
+  }
+  printf("\n");
 }
 
 int main() {
   readbuf(); // read in buffer
-
-  init();
   part1();
+  part2();
   return 0;
 }
