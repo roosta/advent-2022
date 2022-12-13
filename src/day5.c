@@ -3,16 +3,18 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#define MAXSTACK 50
+#define MAXSTACK 52
+#define WIDTH 10
+#define MAXWIDTH 35
 
 // Globals
 int sp[MAXSTACK] = { 0 };
-char diagram[MAXSTACK][MAXSTACK];
-int cols[MAXSTACK] = { 0 };
+char diagram[WIDTH][MAXSTACK];
+int cols[MAXWIDTH] = { 0 };
 
 
 void init() {
-  for (int i = 0; i < MAXSTACK; i++) {
+  for (int i = 0; i < WIDTH; i++) {
     for (int j = 0; j < MAXSTACK; j++) {
       diagram[i][j] = ' ';
     }
@@ -116,7 +118,7 @@ void parse_move(char line[], int idx) {
 void pdiagram(void) {
   char ch;
   for (int i = MAXSTACK - 1; i >= 0; i--) {
-    for (int j = 0; j < MAXSTACK; j++) {
+    for (int j = 1; j < WIDTH; j++) {
       ch = diagram[j][i];
       printf("[%c]", ch);
     }
