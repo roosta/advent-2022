@@ -46,6 +46,8 @@ void readin(void) {
   str[i] = '\0';
 }
 
+/* How many characters need to be processed before the first start-of-message
+ * marker is detected? */
 void part2(void) {
   char ch;
   char que[P2Q] = { 0 };
