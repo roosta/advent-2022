@@ -1,5 +1,5 @@
 #define BUFSIZE 50
-#define MAXLEN 3000
+#define MAXLEN 4096
 
 #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \
