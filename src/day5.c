@@ -102,6 +102,8 @@ void parse_move(char line[], int idx, long ret[]) {
   }
 }
 
+/* Transfer a stack from a given index, utilizing pop and push and recursion to
+ * preserve the order of the stack from the transfer index */
 void transfer(int move, int from, int to) {
   if (move == 0) return;
   char ch = pop(from);
@@ -109,7 +111,8 @@ void transfer(int move, int from, int to) {
   push(to, ch);
 }
 
-// print diagram
+/* print diagram like in the input text
+ * Useful debug tool to visualize each move */
 void print_diagram(void) {
   char ch;
   int max = 0;
@@ -172,6 +175,10 @@ void part1(void) {
   setup();
   idx = parse_diagram();
 
+  printf("Part ONE\n--------\n\n");
+  printf("Diagram before\n");
+  print_diagram();
+
   for (int i = idx; i < height; i++) {
     parse_move(buf[i], i, ldmove);
     for (int j = ldmove[MOVE]; j > 0; j--) {
@@ -180,7 +187,9 @@ void part1(void) {
     }
   }
 
-  printf("The top of the stacks in part 1 is: ");
+  printf("Diagram after\n");
+  print_diagram();
+  printf("Top of stack: ");
 
   // Pop the top of diagram
   for (int j = 1; j < maxcol; j++) {
@@ -199,15 +208,21 @@ void part2(void) {
   setup();
   idx = parse_diagram();
 
+  printf("Part TWO\n--------\n\n");
+  printf("Diagram before\n");
+  print_diagram();
+
   for (int i = idx; i < height; i++) {
     parse_move(buf[i], i, ldmove);
     transfer(ldmove[MOVE], ldmove[FROM], ldmove[TO]);
     /* print_diagram(); */
   }
 
-  printf("The top of the stacks in part 2 is: ");
+  printf("Diagram after\n");
+  print_diagram();
+  printf("Top of stacks: ");
 
-  for (int j = 1; j < 10; j++) {
+  for (int j = 1; j < maxcol; j++) {
     ch = pop(j);
     printf("%c", ch);
   }
@@ -217,6 +232,7 @@ void part2(void) {
 int main() {
   readbuf(); // read in buffer
   part1();
+  printf("\n");
   part2();
   return 0;
 }
