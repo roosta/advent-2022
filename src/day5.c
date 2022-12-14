@@ -102,21 +102,12 @@ void parse_move(char line[], int idx, long ret[]) {
   }
 }
 
-// Parse and execute a move
-void move1(char line[], int idx) {
-  char ch;
-  long m[3] = { 0, 0, 0 };
-  parse_move(line, idx, m);
-
-  for (int i = m[MOVE]; i > 0; i--) {
-    ch = pop(m[FROM]);
-    push(m[TO], ch);
-  }
+void transfer(int move, int from, int to) {
+  if (move == 0) return;
+  char ch = pop(from);
+  transfer(move - 1, from, to);
+  push(to, ch);
 }
-
-/* void move2(char line[], int idx) { */
-
-/* } */
 
 // print diagram
 void print_diagram(void) {
@@ -176,17 +167,20 @@ int parse_diagram() {
 void part1(void) {
   char ch;
   int idx;
+  long ldmove[3] = { 0, 0, 0 };
 
   setup();
   idx = parse_diagram();
 
-  print_diagram();
-
   for (int i = idx; i < height; i++) {
-    move1(buf[i], i);
+    parse_move(buf[i], i, ldmove);
+    for (int j = ldmove[MOVE]; j > 0; j--) {
+      ch = pop(ldmove[FROM]);
+      push(ldmove[TO], ch);
+    }
   }
 
-  print_diagram();
+  printf("The top of the stacks in part 1 is: ");
 
   // Pop the top of diagram
   for (int j = 1; j < maxcol; j++) {
@@ -196,32 +190,33 @@ void part1(void) {
   printf("\n");
 }
 
+/* Stack based approach */
 void part2(void) {
-  /* char ch; */
-  /* int idx; */
+  char ch;
+  int idx;
+  long ldmove[3] = { 0, 0, 0 };
 
-  /* setup(); */
-  /* idx = parse_diagram(); */
+  setup();
+  idx = parse_diagram();
 
+  for (int i = idx; i < height; i++) {
+    parse_move(buf[i], i, ldmove);
+    transfer(ldmove[MOVE], ldmove[FROM], ldmove[TO]);
+    /* print_diagram(); */
+  }
 
-  /* print_diagram(); */
-  /* move2(buf[idx], idx); */
-  /* print_diagram(); */
+  printf("The top of the stacks in part 2 is: ");
 
-  /* for (int i = idx; i < height; i++) { */
-  /*   move1(buf[i], i); */
-  /* } */
-
-  /* for (int j = 1; j < 10; j++) { */
-  /*   ch = pop(j); */
-  /*   printf("%c", ch); */
-  /* } */
-  /* printf("\n"); */
+  for (int j = 1; j < 10; j++) {
+    ch = pop(j);
+    printf("%c", ch);
+  }
+  printf("\n");
 }
 
 int main() {
   readbuf(); // read in buffer
   part1();
-  /* part2(); */
+  part2();
   return 0;
 }
