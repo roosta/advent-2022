@@ -11,6 +11,8 @@
 int sp[MAXSTACK];
 char diagram[WIDTH][MAXSTACK];
 int cols[MAXWIDTH];
+int maxcol = 0;
+enum move { MOVE, FROM, TO };
 
 /* Setup diagram array with spaces, aids in printing via print_diagram, reset
  * stack positions, and clear cols */
@@ -52,14 +54,17 @@ double pop(int col) {
 }
 
 /* Parse column notation at the bottom of diagram */
-/* Doesn't handle indexs beyond 9 */
-void parse_cols(char line[], int idx) {
+/* Doesn't handle indexs beyond 9
+ * Returns the last number registered, so we know how many columns to pop
+ * from*/
+int parse_cols(char line[], int idx) {
   int j = 1;
   for (int i = 0; i < length[idx]; i++) {
     if (isdigit(line[i])) {
       cols[i] = j++;
     }
   }
+  return j;
 }
 
 /* Parse number as long */
@@ -74,12 +79,8 @@ long parse_n(char str[]) {
   }
 }
 
-// Parse and execute a move
-void move1(char line[], int idx) {
-  long move, from, to;
+void parse_move(char line[], int idx, long ret[]) {
   int i, j, nc;
-  char ch;
-  move = from = to = 0;
   nc = 0;
   char str[4];
   for (i = 0, j = 0; i < length[idx]; i++) {
@@ -90,21 +91,32 @@ void move1(char line[], int idx) {
       str[j] = '\0';
       j = 0;
       if (nc == 0) {
-        move = parse_n(str);
+        ret[MOVE] = parse_n(str);
       } else if (nc == 1) {
-        from = parse_n(str);
+        ret[FROM] = parse_n(str);
       } else if (nc == 2) {
-        to = parse_n(str);
+        ret[TO] = parse_n(str);
       }
       nc++;
     }
   }
+}
 
-  for (int i = move; i > 0; i--) {
-    ch = pop(from);
-    push(to, ch);
+// Parse and execute a move
+void move1(char line[], int idx) {
+  char ch;
+  long m[3] = { 0, 0, 0 };
+  parse_move(line, idx, m);
+
+  for (int i = m[MOVE]; i > 0; i--) {
+    ch = pop(m[FROM]);
+    push(m[TO], ch);
   }
 }
+
+/* void move2(char line[], int idx) { */
+
+/* } */
 
 // print diagram
 void print_diagram(void) {
@@ -113,7 +125,7 @@ void print_diagram(void) {
   int j, i, idx;
 
   /* find tallest column */
-  for (i = 0; i < WIDTH; i++) {
+  for (i = 0; i < maxcol; i++) {
     for (j = 0, idx = 0; j < MAXSTACK; j++) {
       if (isalpha(diagram[i][j])) {
         idx++;
@@ -124,7 +136,7 @@ void print_diagram(void) {
 
   /* print diagram tilted 90 degrees, so it matches input */
   for (i = max - 1; i >= 0; i--) {
-    for (j = 1; j < WIDTH; j++) {
+    for (j = 1; j < maxcol; j++) {
       ch = diagram[j][i];
       printf("[%c]", ch);
     }
@@ -146,8 +158,9 @@ int parse_diagram() {
   // parse columns, push to stack
   for (int i = idx; i >= 0; i--) {
     if (i == idx - 1)
-      parse_cols(buf[i], idx - 1);
+      maxcol = parse_cols(buf[i], idx - 1); // save maxcol in global
 
+    // Push diagram to stack
     for (int j = 0; j < length[i]; j++) {
       ch = buf[i][j];
       if (isalpha(ch) && buf[i][j - 1] == '[' && buf[i][j + 1] == ']') {
@@ -167,38 +180,48 @@ void part1(void) {
   setup();
   idx = parse_diagram();
 
+  print_diagram();
+
   for (int i = idx; i < height; i++) {
     move1(buf[i], i);
   }
 
-  for (int j = 1; j < 10; j++) {
+  print_diagram();
+
+  // Pop the top of diagram
+  for (int j = 1; j < maxcol; j++) {
     ch = pop(j);
     printf("%c", ch);
   }
   printf("\n");
-  /* print_diagram(); */
 }
 
 void part2(void) {
-  char ch;
-  int idx;
+  /* char ch; */
+  /* int idx; */
 
-  setup();
-  idx = parse_diagram();
-  for (int i = idx; i < height; i++) {
-    move1(buf[i], i);
-  }
+  /* setup(); */
+  /* idx = parse_diagram(); */
 
-  for (int j = 1; j < 10; j++) {
-    ch = pop(j);
-    printf("%c", ch);
-  }
-  printf("\n");
+
+  /* print_diagram(); */
+  /* move2(buf[idx], idx); */
+  /* print_diagram(); */
+
+  /* for (int i = idx; i < height; i++) { */
+  /*   move1(buf[i], i); */
+  /* } */
+
+  /* for (int j = 1; j < 10; j++) { */
+  /*   ch = pop(j); */
+  /*   printf("%c", ch); */
+  /* } */
+  /* printf("\n"); */
 }
 
 int main() {
   readbuf(); // read in buffer
   part1();
-  part2();
+  /* part2(); */
   return 0;
 }
