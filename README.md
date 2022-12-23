@@ -3,6 +3,9 @@ Advent of code 2022
 
 My solutions to [Advent of code 2022](https://adventofcode.com/2022/)
 
+> Disclamer: I'm pretty new to C, and I probably make some obvious mistakes but
+> you gotta learn somehow :)
+
 To compile a file run:
 
 ```sh
