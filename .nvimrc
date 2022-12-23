@@ -10,4 +10,8 @@ command! Exec set splitbelow | new | read ! bin/#:t:r
 " bin/[target]
 map <F5> :! bin/%:t:r<cr>
 
-let g:ale_c_parse_makefile = 1
+
+" let g:ale_linters = { 'c': ['gcc'] }
+" let g:ale_c_parse_makefile = 1
+" let g:ale_c_cc_executable='gcc'
+" let g:ale_c_cc_options='-std=c99 -Wall -Wextra -pendantic'
