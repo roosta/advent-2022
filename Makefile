@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -Wextra -O0 -std=c99 -pedantic -lm
+CFLAGS=-g -Wall -Wextra -O0 -std=c99 -pedantic
 dir_guard=@mkdir -p $(@D)
 
 bin/%: %.o utils.o

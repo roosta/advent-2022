@@ -17,9 +17,8 @@ enum Command { ERR, CD, LS };
 
 /* push: push f onto value stack */
 void push(char f[]) {
-  if (sp < MAXCMD) {
+  if (sp < MAXCMD)
     strcopy(path[sp++], f);
-  }
   else
     printf("error: stack full, can't push %s\n", f);
 }
@@ -30,6 +29,15 @@ void pop(char to[]) {
     strcopy(to, path[--sp]);
   }
   else {
+    printf("error: stack empty\n");
+  }
+}
+
+/* look at top element of stack without popping it */
+void peek(char to[]) {
+  if (sp > 0) {
+    strcopy(to, path[sp]);
+  } else {
     printf("error: stack empty\n");
   }
 }
@@ -51,7 +59,12 @@ int parse_cmd(char line[], int idx) {
     for (j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
       pt[j] = line[i];
     pt[j] = '\0';
-    push(pt);
+    if (strcmp(pt, "..") == 0) {
+      char r[MAXPATH];
+      pop(r);
+    } else {
+      push(pt);
+    }
     return CD;
   }
   return ERR;
@@ -72,13 +85,16 @@ void part1(void) {
       cmd = parse_cmd(buf[i], i);
       if (cmd == ERR)
         printerr(buf[i]);
+      if (cmd == LS) {
+
+      }
     }
   }
-  char result[MAXPATH];
-  while (sp > 0) {
-    pop(result);
-    printf("{%s}\n", result);
-  }
+  /* char result[MAXPATH]; */
+  /* while (sp > 0) { */
+  /*   pop(result); */
+  /*   printf("{%s}\n", result); */
+  /* } */
 }
 
 int main() {
